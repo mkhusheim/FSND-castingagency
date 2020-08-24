@@ -3,8 +3,8 @@ from sqlalchemy import Integer, Column, Boolean, String, Date, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-database_path = os.environ['DATABASE_URL']
-#database_path = 'postgresql://mimi:m12345@localhost:5432/castingagency'
+# database_path = os.environ['DATABASE_URL']
+database_path = 'postgresql://mimi:m12345@localhost:5432/castingagency'
 db = SQLAlchemy()
 
 '''
@@ -46,5 +46,5 @@ class Actors(db.Model):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    age = Column(Integer, nullable=False)
+    age = Column(Integer, nullable=True)
     gender = Column(String, nullable=False)
