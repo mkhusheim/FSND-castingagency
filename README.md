@@ -2,6 +2,7 @@
 
 This is the final project for Udacity Full Stack Nanodegree to apply all the knowledge learned throughout the course. The application is for a a Casting Agency, a company that creates movies and manages assigning actors to those movies.
 
+Open application: https://capstone-castingagency.herokuapp.com/
 
 ## Getting Started
 
@@ -208,3 +209,7 @@ To run the tests, run
 ```
 python test_app.py
 ```
+## Deployment
+
+This application is deployed using Heroku. 
+Link: https://capstone-castingagency.herokuapp.com/
