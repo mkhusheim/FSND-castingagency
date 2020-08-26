@@ -17,7 +17,6 @@ def create_app(test_config=None):
     # Endpoints
     @app.route('/')
     def get_greeting():
-        #excited = os.environ['EXCITED']
         greeting = "Hello"
         return greeting
 
@@ -32,7 +31,6 @@ def create_app(test_config=None):
                 "id": movie.id,
                 "title": movie.title,
                 "release_date": movie.release_date})
-        # formatted_movies = json.dumps(movies)
         return jsonify({
             "success": True,
             "movies": formatted_movies
@@ -62,18 +60,15 @@ def create_app(test_config=None):
         body = json.loads(request.data, strict=False)
         title = body.get('title', None)
         release_date = body.get('release_date', None)
-        #release_date = datetime.datetime.strptime(release_date_str, '%Y-%m-%d ')
-        # print(release_date.date())
         try:
             new_movie = Movies(title=title, release_date=date)
-            # new_movie.insert()
             db.session.add(new_movie)
             db.session.commit()
             return jsonify({
                 "success": True,
                 "movies": new_movie.name
             })
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -95,7 +90,7 @@ def create_app(test_config=None):
                 "success": True,
                 "actors": new_actor.name
             })
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -103,17 +98,18 @@ def create_app(test_config=None):
     @app.route('/movies/<int:movieID>', methods=['PATCH'])
     @requires_auth('patch:movie')
     def edit_movie(token, movieID):
-        selected_movie = Movies.query.filter(Movies.id == movieID).one_or_none()
-        if selected_movie is None:
+        selected_movie = Movies.query.filter(
+            Movies.id == movieID).one_or_none()
+        if selected_movie is not None:
             abort(404)
         try:
             body = json.loads(request.data, strict=False)
             title = body.get('title', None)
             release_date = body.get('release_date', None)
 
-            if title != None:
+            if title is not None:
                 selected_movie.title = title
-            if release_date != None:
+            if release_date is not None:
                 selected_movie.release_date = release_date
             db.session.update(selected_movie)
             db.session.commit()
@@ -122,7 +118,7 @@ def create_app(test_config=None):
                 "success": True,
                 "actors": movieID
             })
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -130,7 +126,8 @@ def create_app(test_config=None):
     @ app.route('/actors/<int:actorID>', methods=['PATCH'])
     @ requires_auth('patch:actor')
     def edit_actor(token, actorID):
-        selected_actor = Actors.query.filter(Actors.id == actorID).one_or_none()
+        selected_actor = Actors.query.filter(
+            Actors.id == actorID).one_or_none()
         if selected_actor is None:
             abort(404)
         try:
@@ -139,11 +136,11 @@ def create_app(test_config=None):
             age = body.get('age', None)
             gender = body.get('gender', None)
 
-            if name != None:
+            if name is not None:
                 selected_actor.name = name
-            if age != None:
+            if age is not None:
                 selected_actor.age = age
-            if gender != None:
+            if gender is not None:
                 selected_actor.gender = gender
 
             db.session.update(selected_actor)
@@ -153,7 +150,7 @@ def create_app(test_config=None):
                 "success": True,
                 "actors": actorID
             })
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -161,14 +158,14 @@ def create_app(test_config=None):
     @ app.route('/movies/<int:movieID>', methods=['DELETE'])
     @ requires_auth('delete:movie')
     def delete_movie(token, movieID):
-        selected_movie = Movies.query.filter(Movies.id == movieID).one_or_none()
+        selected_movie = Movies.query.filter(
+            Movies.id == movieID).one_or_none()
         if selected_movie is None:
             abort(404)
         try:
-            # selected_movie.delete()
             db.session.delete(selected_movie)
             db.session.commit()
-        except:
+        except Exception:
             abort(422)
             db.session.rollback()
         return jsonify({
@@ -180,14 +177,14 @@ def create_app(test_config=None):
     @ app.route('/actors/<int:actorID>', methods=['DELETE'])
     @ requires_auth('delete:actor')
     def delete_actor(token, actorID):
-        selected_actor = Actors.query.filter(Actors.id == actorID).one_or_none()
+        selected_actor = Actors.query.filter(
+            Actors.id == actorID).one_or_none()
         if selected_actor is None:
             abort(404)
         try:
-            # selected_actor.delete()
             db.session.delete(selected_actor)
             db.session.commit()
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
         return jsonify({
